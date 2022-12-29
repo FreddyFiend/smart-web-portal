@@ -1,5 +1,4 @@
 const express = require("express");
-const expressAsyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken.js");
 const authToken = require("../utils/authToken.js");
 const User = require("./userModel.js");
@@ -7,35 +6,27 @@ const bcrypt = require("bcrypt");
 
 const userRouter = express.Router();
 
-userRouter.get(
-  "/check",
-  authToken(),
-  expressAsyncHandler(async (req, res, next) => {
-    const user = await User.findOne({ email: req.body.email });
-    res.status(200).json({
-      email: user.email,
-      username: user.username,
-      phone: user.phone,
-      user: req.user,
-      success: true,
-    });
-  })
-);
+userRouter.get("/check", authToken(), async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+  res.status(200).json({
+    email: user.email,
+    username: user.username,
+    phone: user.phone,
+    user: req.user,
+    success: true,
+  });
+});
 
-userRouter.get(
-  "/getdetails",
-  authToken(),
-  expressAsyncHandler(async (req, res, next) => {
-    const user = await User.findOne({ email: req.body.email });
-    res.status(200).json({
-      email: user.email,
-      username: user.username,
-      phone: user.phone,
-      user: req.user,
-      success: true,
-    });
-  })
-);
+userRouter.get("/getdetails", authToken(), async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+  res.status(200).json({
+    email: user.email,
+    username: user.username,
+    phone: user.phone,
+    user: req.user,
+    success: true,
+  });
+});
 
 userRouter.post("/signin", async (req, res) => {
   console.log(req.body);
@@ -57,10 +48,9 @@ userRouter.post("/signin", async (req, res) => {
 });
 
 userRouter.post("/signup", async (req, res, next) => {
-  let {email, username, password, key} = req.body
-  
-  
-    const emailExists = await User.findOne({ email});
+  let { email, username, password, key } = req.body;
+
+  const emailExists = await User.findOne({ email });
 
   if (emailExists) {
     return res.json({ msg: "Email already registered", success: false });
@@ -79,9 +69,9 @@ userRouter.post("/signup", async (req, res, next) => {
 
   user.save().then((docs, err) => {
     if (err) {
-      return res.json('something went wrong');
+      return res.json("something went wrong");
     }
-    
+
     return res.send({
       _id: docs._id,
       username: user.username,
@@ -91,6 +81,13 @@ userRouter.post("/signup", async (req, res, next) => {
       success: true,
     });
   });
+});
+
+userRouter.put("/:id", authToken(["admin"]), async (req, res) => {
+  let { roles } = req.body;
+
+  const updatedUser = await User.findByIdAndUpdate(req.params.id, { roles });
+  res.status(202).json({ msg: "Succesfully updated roles!", updatedUser });
 });
 
 module.exports = userRouter;

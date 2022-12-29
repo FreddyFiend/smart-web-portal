@@ -19,8 +19,17 @@ db.once("open", () => {
   console.log("Database is connected !");
 });
 
-const userRoutes = require("./user/userRoutes.js");
+const userRoutes = require("./api/userRoutes.js");
 app.use("/user", userRoutes);
+
+const departmentRoutes = require("./api/departmentRoutes.js");
+app.use("/department", departmentRoutes);
+
+const subjectRoutes = require("./api/subjectRoutes.js");
+app.use("/subject", subjectRoutes);
+
+const fileRoutes = require("./api/fileRoutes.js");
+app.use("/file", fileRoutes);
 
 //app.use(express.static("public"));
 
