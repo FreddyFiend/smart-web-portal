@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">\ </q-page>
+  <q-page class="flex flex-center"> </q-page>
 </template>
 
 <script>
@@ -10,10 +10,10 @@ import { useRoute } from "vue-router";
 export default defineComponent({
   name: "SubjectPage",
   setup() {
-    const router = useRoute();
+    const route = useRoute();
 
     function getSubjects() {
-      api.get(`subject/${router.params.id}`);
+      api.get(`subject/${route.params.id}`);
     }
 
     return {

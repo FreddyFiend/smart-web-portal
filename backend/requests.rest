@@ -1,0 +1,19 @@
+POST http://localhost:5000/user/signup
+content-type: application/json
+
+{
+    "username": "admign",
+    "email": "admifn",
+    "password": "123",
+    "key":"thegrandgateofgreatgarrison"
+}
+
+###
+
+POST http://localhost:5000/user/login
+content-type: application/json
+
+{
+    "email": "mohsin@sucl.com",
+    "password": "12345678"
+}

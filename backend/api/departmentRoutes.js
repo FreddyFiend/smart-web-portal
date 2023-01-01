@@ -20,8 +20,9 @@ departmentRouter.post("/", authToken(["admin"]), async (req, res) => {
     semesters,
   });
 
-  department.save((doc, err) => {
+  department.save((err, doc) => {
     if (err) {
+      console.log(err);
       return res.status(500).json({ msg: "Something went wrong" });
     }
     res.status(201).json({

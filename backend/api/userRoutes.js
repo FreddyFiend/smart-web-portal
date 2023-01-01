@@ -28,27 +28,43 @@ userRouter.get("/getdetails", authToken(), async (req, res, next) => {
   });
 });
 
-userRouter.post("/signin", async (req, res) => {
-  console.log(req.body);
-  const user = await User.findOne({ email: req.body.email });
+userRouter.get("/", authToken(["admin"]), async (req, res, next) => {
+  const users = await User.find();
+  res.status(200).json({
+    users,
+  });
+});
+
+userRouter.post("/login", async (req, res) => {
+  let { email, password } = req.body;
+  email = email.toLowerCase();
+  const user = await User.findOne({ email });
   if (user) {
-    if (bcrypt.compareSync(req.body.password, user.password)) {
-      res.send({
-        _id: user._id,
-        email: user.email,
-        username: user.username,
+    if (bcrypt.compareSync(password, user.password)) {
+      return res.json({
+        user: {
+          _id: user._id,
+          email: user.email,
+          username: user.username,
+          roles: user.roles,
+        },
+
         token: generateToken(user),
         msg: "Logged in succesfully",
         success: true,
       });
-      return;
     }
   }
-  res.status(401).send({ msg: "Invalid email or password", success: false });
+  console.log(" code ran here");
+  res.status(401).json({ msg: "Invalid email or password", success: false });
 });
 
 userRouter.post("/signup", async (req, res, next) => {
   let { email, username, password, key } = req.body;
+
+  if (!password || !email || !username) {
+    return res.json({ msg: "empty credentials" });
+  }
 
   const emailExists = await User.findOne({ email });
 
@@ -62,7 +78,7 @@ userRouter.post("/signup", async (req, res, next) => {
 
   const user = new User({
     username,
-    email,
+    email: email.toLowerCase(),
     roles,
     password: bcrypt.hashSync(password, 8),
   });
@@ -73,9 +89,12 @@ userRouter.post("/signup", async (req, res, next) => {
     }
 
     return res.send({
-      _id: docs._id,
-      username: user.username,
-      email: docs.email,
+      user: {
+        _id: docs._id,
+        username: user.username,
+        email: docs.email,
+        roles: docs.roles,
+      },
       token: generateToken(docs),
       msg: "Account created succesfully",
       success: true,
@@ -85,7 +104,7 @@ userRouter.post("/signup", async (req, res, next) => {
 
 userRouter.put("/:id", authToken(["admin"]), async (req, res) => {
   let { roles } = req.body;
-
+  console.log(roles);
   const updatedUser = await User.findByIdAndUpdate(req.params.id, { roles });
   res.status(202).json({ msg: "Succesfully updated roles!", updatedUser });
 });

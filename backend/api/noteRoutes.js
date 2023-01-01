@@ -21,7 +21,7 @@ noteRouter.post("/", authToken(["teacher", "admin"]), async (req, res) => {
     user: req.user.username,
   });
 
-  note.save((doc, err) => {
+  note.save((err, doc) => {
     if (err) {
       return res.status(500).json({ msg: "Something went wrong" });
     }

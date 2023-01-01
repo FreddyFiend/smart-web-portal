@@ -9,7 +9,6 @@
         lazy-rules
         :rules="[(val) => (val && val.length > 0) || 'Please type something']"
       />
-      {{ email }}
       <q-input
         filled
         type="password"
@@ -28,11 +27,17 @@
 
 <script>
 import { api } from "src/boot/axios";
+import { useSwpStore } from "src/stores/swp";
 import { defineComponent, ref } from "vue";
+import { useQuasar } from "quasar";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "LoginPage",
   setup() {
+    const router = useRouter();
+    const $q = useQuasar();
+    const store = useSwpStore();
     const email = ref(null);
     const password = ref(null);
     const onSubmit = () => {
@@ -43,15 +48,33 @@ export default defineComponent({
           password: password.value,
         })
         .then((res) => {
-          console.log(res.data);
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+          localStorage.setItem("token", res.data.token);
+          store.setUser(res.data.user);
+          store.setToken(res.data.token);
+          api.defaults.headers.common["Authorization"] =
+            "Bearer " + res.data.token;
+          router.push("/");
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+          $q.notify({
+            message: err.response.data.msg,
+            color: "red",
+          });
         });
     };
     return {
+      router,
       model: ref(null),
       email,
       password,
       onSubmit,
+      store,
     };
+  },
+  created() {
+    this.store.setTitle("Login");
   },
 });
 </script>

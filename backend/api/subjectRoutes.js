@@ -21,7 +21,7 @@ subjectRouter.post("/", authToken(["admin"]), async (req, res) => {
     department,
   });
 
-  subject.save((doc, err) => {
+  subject.save((err, doc) => {
     if (err) {
       return res.status(500).json({ msg: "Something went wrong" });
     }
