@@ -26,6 +26,24 @@ const routes = [
     ],
   },
   {
+    path: "/teacherpage",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [
+      { path: "", component: () => import("pages/teacher/TeacherPage.vue") },
+    ],
+  },
+
+  {
+    path: "/uploadlecture",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("pages/teacher/UploadLecturePage.vue"),
+      },
+    ],
+  },
+  {
     path: "/admindepartment",
     component: () => import("layouts/MainLayout.vue"),
     children: [

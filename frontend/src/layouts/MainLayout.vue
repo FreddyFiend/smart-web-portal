@@ -36,6 +36,21 @@
             <q-item-section>Sign Out</q-item-section>
           </q-item>
           <q-item
+            to="teacherpage"
+            clickable
+            v-ripple
+            v-if="
+              store.user.roles.includes('admin') ||
+              store.user.roles.includes('teacher')
+            "
+          >
+            <q-item-section avatar>
+              <q-icon color="red" name="logout" />
+            </q-item-section>
+
+            <q-item-section>Teacher's Portal</q-item-section>
+          </q-item>
+          <q-item
             to="adminpage"
             clickable
             v-ripple
@@ -45,7 +60,7 @@
               <q-icon color="red" name="logout" />
             </q-item-section>
 
-            <q-item-section>Admin</q-item-section>
+            <q-item-section>Admin's Portal</q-item-section>
           </q-item>
         </div>
         <div v-if="!store.user">
