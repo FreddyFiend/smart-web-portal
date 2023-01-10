@@ -2,6 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
+        <q-toolbar-title> {{ store.title }} </q-toolbar-title>
         <q-btn
           flat
           dense
@@ -10,16 +11,20 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-
-        <q-toolbar-title> {{ store.title }} </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered side="right">
-      <q-list>
-        <q-item-label header> Smart Web Portal </q-item-label>
+      <q-list
+        ><q-item-label header> Smart Web Portal </q-item-label>
+        <q-item to="/" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon color="primary" name="home" />
+          </q-item-section>
+
+          <q-item-section>Home</q-item-section>
+        </q-item>
+
         <div v-if="store.user">
           <q-item to="profile" clickable v-ripple>
             <q-item-section avatar>
@@ -45,7 +50,7 @@
             "
           >
             <q-item-section avatar>
-              <q-icon color="red" name="logout" />
+              <q-icon color="secondary" name="school" />
             </q-item-section>
 
             <q-item-section>Teacher's Portal</q-item-section>
@@ -57,7 +62,7 @@
             v-if="store.user.roles.includes('admin')"
           >
             <q-item-section avatar>
-              <q-icon color="red" name="logout" />
+              <q-icon color="secondary" name="security" />
             </q-item-section>
 
             <q-item-section>Admin's Portal</q-item-section>

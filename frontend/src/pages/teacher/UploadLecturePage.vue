@@ -1,39 +1,59 @@
 <template>
-  <q-page class="q-pa-md">
-    <SelectDepartmentVue @selectDepartmentEvent="departmentSelected" />
+  <q-page>
+    <SelectDepartmentVue
+      class="q-pa-md"
+      @selectDepartmentEvent="departmentSelected"
+    />
     <SelectSubjectVue
+      class="q-pa-md"
       @selectSubjectEvent="subjectSelected"
       v-if="departmentModel"
       :departmentModel="departmentModel"
     />
-
-    <q-form @submit="onSubmit">
-      <q-input class="q-pa-md" outlined v-model="text" label="Lecture Title" />
+    <q-form @submit="onSubmit" v-if="subjectModel">
+      <q-input
+        class="q-pa-md"
+        outlined
+        v-model="titleModel"
+        label="Lecture Title"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+      />
       <q-input
         class="q-pa-md"
         outlined
         v-model="linkModel"
-        label="Lecture youtube link"
+        label="Lecture Youtube link"
+        @update:model-value="getId()"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
       >
         <template v-slot:prepend> <q-icon name="link" /> </template>
       </q-input>
-      <q-btn @click="getId()">Show</q-btn>
-    </q-form>
+      <div class="q-pa-md text-h6" v-if="videoUrl === 'error'">
+        Link Error! paste link in the following form
+        https://www.youtube.com/watch?v=16QXuxxxx
+      </div>
 
-    <div class="text-h6" v-if="videoUrl === 'error'">
-      Link Error! paste link in the following form
-      https://www.youtube.com/watch?v=16QXuxxxx
-    </div>
-    <iframe
-      v-if="linkModel && videoUrl !== 'error'"
-      width="560"
-      height="315"
-      :src="videoUrl"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-    ></iframe>
+      <iframe
+        class="q-pa-md"
+        v-if="linkModel && videoUrl !== 'error'"
+        width="560"
+        height="315"
+        :src="videoUrl"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+
+      <q-btn
+        class="q-ma-md"
+        type="submit"
+        v-if="linkModel && videoUrl !== 'error'"
+        >Submit</q-btn
+      >
+    </q-form>
   </q-page>
 </template>
 
@@ -52,6 +72,7 @@ export default defineComponent({
     const store = useSwpStore();
     const router = useRouter();
     const route = useRoute();
+    const titleModel = ref(null);
     const departmentModel = ref(null);
     const subjectModel = ref(null);
     const linkModel = ref(null);
@@ -74,9 +95,36 @@ export default defineComponent({
         videoUrl.value = "error";
       }
     }
+    function onSubmit() {
+      api
+        .post(`/note`, {
+          noteType: "lecture",
+          subject: subjectModel.value._id,
+          department: departmentModel.value._id,
+          semester: subjectModel.value.semester,
+
+          title: titleModel.value,
+          text: videoUrl.value,
+        })
+        .then((res) => {
+          $q.notify({
+            message: "Successfully uploaded lecture!",
+            color: "green",
+          });
+          router.push("teacherpage");
+        })
+        .catch((err) => {
+          $q.notify({
+            message: "Some unexpected error occurred!",
+            color: "red",
+          });
+        });
+    }
     return {
       router,
       linkModel,
+      titleModel,
+      api,
       getId,
       videoUrl,
       route,
@@ -86,6 +134,7 @@ export default defineComponent({
       subjectSelected,
       departmentModel,
       subjectModel,
+      onSubmit,
     };
   },
   components: {

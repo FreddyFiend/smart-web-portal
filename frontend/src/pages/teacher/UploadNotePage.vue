@@ -6,6 +6,27 @@
       v-if="departmentModel"
       :departmentModel="departmentModel"
     />
+
+    <q-form @submit="onSubmit" v-if="subjectModel">
+      <q-input
+        class="q-pa-md"
+        outlined
+        v-model="titleModel"
+        label="Note Title"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+      />
+      <q-input
+        class="q-pa-md"
+        v-model="textModel"
+        outlined
+        label="Note Text"
+        autogrow
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+      />
+      <q-btn class="q-ma-md" type="submit">Submit</q-btn>
+    </q-form>
   </q-page>
 </template>
 
@@ -26,6 +47,9 @@ export default defineComponent({
     const route = useRoute();
     const departmentModel = ref(null);
     const subjectModel = ref(null);
+    const titleModel = ref(null);
+    const textModel = ref(null);
+
     function departmentSelected(value) {
       departmentModel.value = value;
     }
@@ -33,15 +57,46 @@ export default defineComponent({
     function subjectSelected(value) {
       subjectModel.value = value;
     }
+    function onSubmit() {
+      api
+        .post("/note", {
+          semester: subjectModel.value.semester,
+          subject: subjectModel.value._id,
+          title: titleModel.value,
+          department: departmentModel.value._id,
+          text: textModel.value,
+          noteType: "note",
+        })
+        .then((res) => {
+          $q.notify({
+            message: "Successfully posted note!",
+            color: "green",
+            icon: "done",
+          });
+          titleModel.value = "";
+          textModel.value = "";
+        })
+        .catch((err) => {
+          console.log(err);
+          $q.notify({
+            message: "Unexpected error occured!",
+            color: "red",
+          });
+        });
+    }
+
     return {
       router,
       route,
       $q,
       store,
+      titleModel,
+      textModel,
       departmentSelected,
       subjectSelected,
       departmentModel,
       subjectModel,
+      onSubmit,
     };
   },
   components: {

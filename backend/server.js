@@ -28,8 +28,8 @@ app.use("/department", departmentRoutes);
 const subjectRoutes = require("./api/subjectRoutes.js");
 app.use("/subject", subjectRoutes);
 
-const fileRoutes = require("./api/fileRoutes.js");
-app.use("/file", fileRoutes);
+const noteRoutes = require("./api/noteRoutes.js");
+app.use("/note", noteRoutes);
 
 //app.use(express.static("public"));
 

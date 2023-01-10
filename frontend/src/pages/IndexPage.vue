@@ -103,29 +103,29 @@ export default defineComponent({
       {
         title: "Assignments",
         icon: "assignment",
-        link: "as",
+        link: "/assignments",
       },
 
       {
         title: "Lectures",
         icon: "slideshow",
-        link: "as",
+        link: "/lectures",
       },
 
       {
         title: "Slides",
         icon: "view_cozy",
-        link: "as",
+        link: "/slides",
       },
       {
         title: "Notes",
         icon: "description",
-        link: "as",
+        link: "/notes",
       },
       {
         title: "Outlines",
         icon: "format_list_bulleted",
-        link: "as",
+        link: "/outlines",
       },
     ];
 

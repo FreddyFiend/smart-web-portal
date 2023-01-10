@@ -6,6 +6,15 @@
       v-if="departmentModel"
       :departmentModel="departmentModel"
     />
+
+    <q-form @submit="sendFile()" v-if="subjectModel">
+      <q-file outlined v-model="model" accept=".ppt, .pptx, .pdf">
+        <template v-slot:prepend>
+          <q-icon name="attach_file" />
+        </template>
+      </q-file>
+      <q-btn type="submit">upload</q-btn>
+    </q-form>
   </q-page>
 </template>
 
@@ -34,6 +43,33 @@ export default defineComponent({
       subjectModel.value = value;
     }
     return {
+      model: ref(null),
+      sendFile() {
+        const fd = new FormData();
+        fd.append("file", this.model);
+        fd.append("subject", subjectModel.value._id);
+        fd.append("semester", subjectModel.value.semester);
+        fd.append("department", departmentModel.value._id);
+        api
+          .post("/note/file", fd, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            $q.notify({
+              message: "Successfully uploaded files!",
+              color: "green",
+            });
+            router.push("teacherpage");
+          })
+          .catch((err) => {
+            $q.notify({
+              message: "Some unexpected error occurred!",
+              color: "red",
+            });
+          });
+      },
       router,
       route,
       $q,

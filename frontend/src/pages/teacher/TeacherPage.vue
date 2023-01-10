@@ -37,7 +37,7 @@ export default defineComponent({
       {
         title: "Write Assignment",
         icon: "assignment",
-        link: "as",
+        link: "/uploadassignment",
       },
 
       {
@@ -49,17 +49,17 @@ export default defineComponent({
       {
         title: "Upload Slides/PDFs",
         icon: "view_cozy",
-        link: "as",
+        link: "/uploadslide",
       },
       {
         title: "Post Notes",
         icon: "description",
-        link: "as",
+        link: "/uploadnote",
       },
       {
         title: "Post Outlines",
         icon: "format_list_bulleted",
-        link: "as",
+        link: "/uploadoutline",
       },
     ];
     return {

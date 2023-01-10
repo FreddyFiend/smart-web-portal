@@ -5,7 +5,11 @@ const subjectSchema = new mongoose.Schema(
     title: { type: String, required: true },
     code: { type: String, required: false },
     semester: { type: Number, required: false },
-    department: { type: mongoose.Schema.Types.ObjectId, required: true },
+    department: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "department",
+    },
   },
   {
     timestamps: true,
