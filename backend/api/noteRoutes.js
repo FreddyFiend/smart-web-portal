@@ -78,9 +78,41 @@ noteRouter.get("/", async (req, res) => {
   })
     .populate("user")
     .populate("subject");
-  console.log(notes);
   res.status(200).json({
     notes,
+  });
+});
+
+noteRouter.get("/:userid", async (req, res) => {
+  const notes = await Note.find({ user: req.params.userid })
+    .populate("user")
+    .populate("subject");
+  res.status(200).json({
+    notes,
+  });
+});
+
+noteRouter.delete("/:noteid", async (req, res) => {
+  Note.findByIdAndDelete(req.params.noteid).then((note) => {
+    if (!note) {
+      res.status(400).send("  not found");
+    } else if (note.noteType === "file") {
+      fs.unlink(`uploads/${note.text}`, (err) => {
+        if (err) {
+          console.log(err);
+          res.status(500).json({
+            msg: "Could not delete the file. ",
+          });
+        }
+
+        res.status(200).json({
+          msg: "File is deleted.",
+        });
+      });
+      res.status(200).json({ msg: "ok" });
+    } else {
+      res.status(200).json({ msg: "ok" });
+    }
   });
 });
 
