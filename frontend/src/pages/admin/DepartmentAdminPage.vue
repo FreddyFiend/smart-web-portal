@@ -162,13 +162,16 @@ export default defineComponent({
           semesters: semestersModel.value,
         })
         .then((res) => {
-          console.log(res);
+          typeModel.value = "";
+          semestersModel.value = "";
+          departmentTitleModel.value = "";
           $q.notify({
             message: res.data.msg,
             color: "green",
             icon: "done",
           });
           getDepartments();
+          showAddDepartment.value = false;
         })
         .catch((err) => {
           console.log(err.response);

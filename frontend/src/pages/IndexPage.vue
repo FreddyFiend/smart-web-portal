@@ -1,5 +1,8 @@
 <template>
   <q-page class="q-pa-md">
+    <div class="text-caption">
+      Populated department: Computer Science, semester 6
+    </div>
     <q-form
       class="q-pa-md"
       v-if="!store.department && !store.subject"
@@ -59,7 +62,9 @@
             color="white"
             size="120px"
           ></q-icon>
-          <div class="text-h6 text-white col-12 text-center">
+          <div
+            class="text-body1 q-pt-sm text-weight-medium text-white col-12 text-center"
+          >
             {{ item.title }}
           </div>
         </div>
@@ -76,7 +81,9 @@
             color="white"
             size="120px"
           ></q-icon>
-          <div class="text-h6 text-white col-12 text-center">
+          <div
+            class="text-body1 text-weight-medium q-pt-sm text-white col-12 text-center"
+          >
             Re-select Department & Semester
           </div>
         </div>

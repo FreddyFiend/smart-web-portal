@@ -2,15 +2,22 @@
   <q-page class="flex flex-center">
     <q-form @submit="onSubmit" class="q-gutter-md">
       <q-input
-        filled
-        v-model="email"
-        label="Your email"
+        outlined=""
+        v-model="username"
+        label="Your name"
         hint="Name and surname"
         lazy-rules
         :rules="[(val) => (val && val.length > 0) || 'Please type something']"
       />
       <q-input
-        filled
+        outlined=""
+        v-model="email"
+        label="Your email"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+      />
+      <q-input
+        outlined=""
         type="password"
         v-model="password"
         label="Your password"
@@ -19,7 +26,7 @@
       />
 
       <div>
-        <q-btn label="Login" type="submit" color="primary" />
+        <q-btn label="Register" type="submit" color="secondary" />
       </div>
     </q-form>
   </q-page>
@@ -33,17 +40,19 @@ import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
-  name: "LoginPage",
+  name: "RegisterPage",
   setup() {
     const router = useRouter();
     const $q = useQuasar();
     const store = useSwpStore();
-    const email = ref(null);
-    const password = ref(null);
+    const username = ref("");
+    const email = ref("");
+    const password = ref("");
     const onSubmit = () => {
       console.log(email);
       api
-        .post("user/login", {
+        .post("user/signup", {
+          username: username.value,
           email: email.value,
           password: password.value,
         })
@@ -54,10 +63,15 @@ export default defineComponent({
           store.setToken(res.data.token);
           api.defaults.headers.common["Authorization"] =
             "Bearer " + res.data.token;
+          console.log(res.data);
           router.push("/");
+          $q.notify({
+            message: err.response.data.msg,
+            color: "green",
+          });
         })
         .catch((err) => {
-          console.log(err.response.data);
+          console.error(err);
           $q.notify({
             message: err.response.data.msg,
             color: "red",
@@ -67,6 +81,7 @@ export default defineComponent({
     return {
       router,
       model: ref(null),
+      username,
       email,
       password,
       onSubmit,
@@ -74,7 +89,7 @@ export default defineComponent({
     };
   },
   created() {
-    this.store.setTitle("Login");
+    this.store.setTitle("Register");
   },
 });
 </script>

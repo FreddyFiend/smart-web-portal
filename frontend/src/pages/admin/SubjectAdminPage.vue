@@ -56,7 +56,11 @@
       </q-btn>
     </div>
 
-    <q-form @submit="onSubmit" class="q-gutter-md" v-if="showAddSubject">
+    <q-form
+      @submit="onSubmit"
+      class="q-gutter-md q-pt-md"
+      v-if="showAddSubject"
+    >
       <q-input
         outlined
         v-model="subjectTitleModel"
@@ -138,6 +142,7 @@ export default defineComponent({
           subjectSemesterModel.value = "";
           subjectTitleModel.value = "";
           selectDepartmentEvent();
+          showAddSubject.value = false;
         });
     }
     function selectDepartmentEvent() {

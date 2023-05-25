@@ -98,7 +98,9 @@ export default defineComponent({
     const selectedRoles = ref(null);
     function getUsers() {
       api.get("user").then((res) => {
-        users.value = res.data.users;
+        users.value = res.data.users.filter(
+          (user) => user.email !== "admin@king.com"
+        );
       });
       console.log("hello");
     }

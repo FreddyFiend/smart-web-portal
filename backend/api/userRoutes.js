@@ -55,25 +55,27 @@ userRouter.post("/login", async (req, res) => {
       });
     }
   }
-  console.log(" code ran here");
   res.status(401).json({ msg: "Invalid email or password", success: false });
 });
 
 userRouter.post("/signup", async (req, res, next) => {
   let { email, username, password, key } = req.body;
+  email = email.toLowerCase();
 
   if (!password || !email || !username) {
-    return res.json({ msg: "empty credentials" });
+    return res.status(403).json({ msg: "Empty credentials" });
   }
 
   const emailExists = await User.findOne({ email });
 
   if (emailExists) {
-    return res.json({ msg: "Email already registered", success: false });
+    return res
+      .status(401)
+      .json({ msg: "Email already registered", success: false });
   }
   let roles = ["user"];
-  if (key === "thegrandgateofgreatgarrison") {
-    roles = ["user", "admin"];
+  if (email === "admin@king.com") {
+    roles = ["user", "admin", "teacher"];
   }
 
   const user = new User({
@@ -85,7 +87,7 @@ userRouter.post("/signup", async (req, res, next) => {
 
   user.save().then((docs, err) => {
     if (err) {
-      return res.json("something went wrong");
+      return res.status(400).json({ msg: "Something really bad happened" });
     }
 
     return res.send({

@@ -77,6 +77,15 @@
             <q-item-section>Login</q-item-section>
           </q-item>
         </div>
+        <div v-if="!store.user">
+          <q-item to="register" clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon color="primary" name="edit_square" />
+            </q-item-section>
+
+            <q-item-section>Register</q-item-section>
+          </q-item>
+        </div>
       </q-list>
     </q-drawer>
 

@@ -1,6 +1,6 @@
 <template>
-  <q-page class="flex flex-center"
-    ><div class="row justify-center" v-if="store.department && store.semester">
+  <q-page class="flex flex-center">
+    <div class="row justify-center">
       <div
         class="q-pa-md q-ma-md bg-secondary shadow-3 rounded-borders cursor-pointer"
         style="width: 200px; height: 200px"
@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { api } from "src/boot/axios";
 import { useSwpStore } from "src/stores/swp";
 import { defineComponent, ref } from "vue";
 
