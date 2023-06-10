@@ -7,7 +7,8 @@ import axios from "axios";
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({ baseURL: "http://localhost:5000" });
+// const api = axios.create({ baseURL: "http://localhost:5000" });
+const api = axios.create({ baseURL: "https://smart-web-portal.onrender.com" });
 const token = localStorage.getItem("token");
 api.defaults.headers.common["Authorization"] = token ? `Bearer ${token}` : "";
 export default boot(({ app }) => {
