@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="col justify-center items-center q-pa-xl">
     <q-form @submit="onSubmit" class="q-gutter-md">
       <q-input
         filled
@@ -18,23 +18,22 @@
         :rules="[(val) => (val && val.length > 0) || 'Please type something']"
       />
 
-      <div>
-        <q-btn label="Login" type="submit" color="primary" />
-      </div>
+      <q-btn label="Login" type="submit" color="primary" />
+    </q-form>
+    <div class="q-pt-lg">
       <q-btn
-        label="Login as Teacher"
-        type="submit"
+        label="fill as Teacher"
         color="primary"
-        @click="setLoginValues('teacher@swp.com', 'password')"
+        @click="setLoginValues('teacher@email.com', 'IAmTheGoat666')"
       />
 
       <q-btn
-        label="Login as admin"
-        type="submit"
+        label="fill as admin"
+        class="q-ml-md"
         color="primary"
-        @click="setLoginValues('admin@swp.com', 'password')"
+        @click="setLoginValues('admin@email.com', 'IAmTheGoat666')"
       />
-    </q-form>
+    </div>
   </q-page>
 </template>
 
@@ -54,7 +53,6 @@ export default defineComponent({
     const email = ref("");
     const password = ref("");
     const onSubmit = () => {
-      console.log(email);
       api
         .post("user/login", {
           email: email.value,
@@ -70,7 +68,6 @@ export default defineComponent({
           router.push("/");
         })
         .catch((err) => {
-          console.log(err.response.data);
           $q.notify({
             message: err.response.data.msg,
             color: "red",

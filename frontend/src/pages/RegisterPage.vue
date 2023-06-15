@@ -66,7 +66,7 @@ export default defineComponent({
           console.log(res.data);
           router.push("/");
           $q.notify({
-            message: err.response.data.msg,
+            message: res.data.msg,
             color: "green",
           });
         })
