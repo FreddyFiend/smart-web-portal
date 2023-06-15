@@ -45,7 +45,11 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
     build: {
       vueRouterMode: "hash", // available values: 'hash', 'history'
-
+      env: {
+        API: ctx.dev
+          ? "http://localhost:5000"
+          : "https://smart-web-portal.onrender.com",
+      },
       // transpile: false,
       // publicPath: '/',
 

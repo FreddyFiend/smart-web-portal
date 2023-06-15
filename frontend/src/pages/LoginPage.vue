@@ -21,6 +21,19 @@
       <div>
         <q-btn label="Login" type="submit" color="primary" />
       </div>
+      <q-btn
+        label="Login as Teacher"
+        type="submit"
+        color="primary"
+        @click="setLoginValues('teacher@swp.com', 'password')"
+      />
+
+      <q-btn
+        label="Login as admin"
+        type="submit"
+        color="primary"
+        @click="setLoginValues('admin@swp.com', 'password')"
+      />
     </q-form>
   </q-page>
 </template>
@@ -38,8 +51,8 @@ export default defineComponent({
     const router = useRouter();
     const $q = useQuasar();
     const store = useSwpStore();
-    const email = ref(null);
-    const password = ref(null);
+    const email = ref("");
+    const password = ref("");
     const onSubmit = () => {
       console.log(email);
       api
@@ -71,6 +84,10 @@ export default defineComponent({
       password,
       onSubmit,
       store,
+      setLoginValues(email, password) {
+        this.email = email;
+        this.password = password;
+      },
     };
   },
   created() {
